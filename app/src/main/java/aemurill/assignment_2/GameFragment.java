@@ -11,7 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import static android.content.ContentValues.TAG;
 import static junit.framework.Assert.fail;
@@ -20,22 +22,12 @@ import static junit.framework.Assert.fail;
  * Created by Beeooow on 11/4/2017.
  */
 
-public class GameFragment extends Fragment {
+public class GameFragment extends Fragment implements View.OnClickListener {
     final static String ARG_COLUMN = "column";
     final static String ARG_STATE = "state";
     int selectedColumn = -1;
     int col = 7, row = 6;
     String state = "000000000000000000000000000000000000000000"; //defaulted to empty grid
-
-    public GameFragment(){
-
-    }
-
-    public static GameFragment getInstance(){
-        GameFragment fragment = new GameFragment();
-        fragment.setRetainInstance(true);
-        return fragment;
-    }
 
     private class DrawView extends View {
         Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -172,23 +164,32 @@ public class GameFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-//        return drawView = new DrawView(getActivity());;
-        DrawView drawView = new DrawView(getActivity());
-        return drawView;
+        return new DrawView(getActivity());
+        /*View rootView = inflater.inflate(R.layout.game_view, container, false);
+        DrawView drawView = rootView.findViewById(R.id.drawView);
+        //new DrawView(getContext());
+        drawView.setOnClickListener(this);
+        return drawView;*/
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        /*// Inflate the layout for this fragment
+//        return inflater.inflate(R.layout.main_view, container, false);
+//        */
+//        View rootView = inflater.inflate(R.layout.main_view, container, false);
+//        Button playButton = (Button) rootView.findViewById(R.id.play);
+//        playButton.setOnClickListener(this);
+//        Button loadButton = (Button) rootView.findViewById(R.id.load);
+//        loadButton.setOnClickListener(this);
+//        Button restartButton = (Button) rootView.findViewById(R.id.restart);
+//        restartButton.setOnClickListener(this);
+//        return rootView;
+//    }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onClick(View view){
+        Toast.makeText(getContext(), "COLUMN", Toast.LENGTH_SHORT).show();
     }
 }

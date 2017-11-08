@@ -1,5 +1,6 @@
 package aemurill.assignment_2;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -14,8 +15,10 @@ public class Main_Activity extends FragmentActivity {
         setContentView(R.layout.activity_view);
 
         // Check that the activity is using the layout version with
-        // the fragment_container FrameLayout
+        // the fragment_container FrameLayout aka SMALL
         if (findViewById(R.id.fragment_container) != null) {
+            //force screen orientation portrait
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             // However, if we're being restored from a previous state,
             // then we don't need to do anything and should return or else
             // we could end up with overlapping fragments.
@@ -35,10 +38,47 @@ public class Main_Activity extends FragmentActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, currentFragment).commit();
 
-        //the layout is the one without fragment_container
+
+        }else{
+            // the layout is the one without fragment_container aka LARGE
+            //force screen orientation portrait
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
 
 
     }
+
+//    public void myClickMethod(View view){
+//        // The user selected the headline of an article from the HeadlinesFragment
+//
+//        // Capture the article fragment from the activity layout
+//        MainFragment mainFrag = (MainFragment)
+//                getSupportFragmentManager().findFragmentById(R.id.main);
+//
+//        if (mainFrag != null) {
+//            // If article frag is available, we're in two-pane layout...
+//
+//            // Call a method in the ArticleFragment to update its content
+//            mainFrag.myClickMethod(view);
+//
+//        } else {
+//            // If the frag is not available, we're in the one-pane layout and must swap frags...
+//
+//            // Create fragment and give it an argument for the selected article
+//            GameFragment newFrag = new GameFragment();
+//            Bundle args = new Bundle();
+//            //args.putInt(MainFragment.ARG_POSITION, position);
+//            newFrag.setArguments(args);
+//            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//
+//            // Replace whatever is in the fragment_container view with this fragment,
+//            // and add the transaction to the back stack so the user can navigate back
+//            transaction.replace(R.id.fragment_container, newFrag);
+//            transaction.addToBackStack(null);
+//
+//            // Commit the transaction
+//            transaction.commit();
+//        }
+//    }
 }
 

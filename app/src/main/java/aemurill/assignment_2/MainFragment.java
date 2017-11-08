@@ -14,7 +14,14 @@ import android.widget.Toast;
  * Created by Beeooow on 11/4/2017.
  */
 
-public class MainFragment extends Fragment{
+public class MainFragment extends Fragment implements View.OnClickListener{
+//    OnButtonClickListener buttonCallback;
+//
+//    // Container Activity must implement this interface
+//    public interface OnButtonClickListener {
+//        public void myClickMethod();
+//    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -23,31 +30,27 @@ public class MainFragment extends Fragment{
         */
         View rootView = inflater.inflate(R.layout.main_view, container, false);
         Button playButton = (Button) rootView.findViewById(R.id.play);
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                Toast toast = Toast.makeText(getContext(), "PLAY", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
+        playButton.setOnClickListener(this);
         Button loadButton = (Button) rootView.findViewById(R.id.load);
-        loadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                Toast toast = Toast.makeText(getContext(), "LOAD", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
+        loadButton.setOnClickListener(this);
         Button restartButton = (Button) rootView.findViewById(R.id.restart);
-        restartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                Toast toast = Toast.makeText(getContext(), "RESTART", Toast.LENGTH_SHORT);
-                toast.show();
-            }
-        });
+        restartButton.setOnClickListener(this);
         return rootView;
     }
 
+    @Override
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.play:
+                Toast.makeText(getContext(), "PLAY", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.load:
+                Toast.makeText(getContext(), "LOAD", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.restart:
+                Toast.makeText(getContext(), "RESTART", Toast.LENGTH_SHORT).show();
+                break;
+        }
 
+    }
 }
