@@ -23,9 +23,8 @@ import static junit.framework.Assert.fail;
  */
 
 public class GameFragment extends Fragment implements View.OnClickListener {
-    final static String ARG_COLUMN = "column";
-    final static String ARG_STATE = "state";
-    int selectedColumn = -1;
+    final static String ARG_LOAD = "LoadState";
+    boolean LoadState = false;
     int col = 7, row = 6;
     String state = "000000000000000000000000000000000000000000"; //defaulted to empty grid
 
@@ -164,6 +163,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        Toast.makeText(getContext(), String.valueOf(LoadState), Toast.LENGTH_SHORT).show();
         return new DrawView(getActivity());
         /*View rootView = inflater.inflate(R.layout.game_view, container, false);
         DrawView drawView = rootView.findViewById(R.id.drawView);
@@ -190,6 +190,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view){
-        Toast.makeText(getContext(), "COLUMN", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), String.valueOf(LoadState), Toast.LENGTH_SHORT).show();
     }
 }
