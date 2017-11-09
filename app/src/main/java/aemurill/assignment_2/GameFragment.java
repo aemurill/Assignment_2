@@ -25,19 +25,12 @@ import static junit.framework.Assert.fail;
  */
 
 public class GameFragment extends Fragment{
-    final static String ARG_LOAD = "LoadState";
-    int loadState = 0;
-    int turn = 1;
-    boolean win = false;
-    final String def_state = "000000000000000000000000000000000000000000";
-    String state = def_state;
-    int Position = -1;
-
+    private DataModel model = new DataModel();
     //??????????
     public void startView(int load){
-        loadState = load;
-        state = def_state;
-        turn = 1;
+        model.setLoadState(load);
+        model.setState(model.getDef_state());
+        model.setTurn(1);
         onStart();
     }
 
@@ -90,97 +83,12 @@ public class GameFragment extends Fragment{
         if (text1 != null && text2 != null) {
 //                Toast.makeText(getContext(),
 //                        "Load? - " + String.valueOf(loadState), Toast.LENGTH_SHORT).show();
-            state = text1.toString();
-            turn = Integer.valueOf(text2.toString());
-            updateDrawView(state);
+            model.setState(text1.toString());
+            model.setTurn(Integer.valueOf(text2.toString()));
+            updateDrawView(model.getState());
         } else {
             Log.e("LOAD_ERR2", "LOADED FILES INVALID");
         }
-    }
-
-    public boolean winDetect(String new_state){
-        System.out.println(new_state);
-        int[][] grid = new int[7][6];
-        for(int i = 0; i < 7; i++){
-            for(int j = 0; j < 6; j++){
-                int k = i * 6 + j;
-                grid[i][j] = Integer.parseInt(new_state.substring(k, k+1));
-            }
-        }
-        //Vertical
-        for (int i = 0; i < 7; i++){
-            int count = 0;
-            for(int j = 0; j < 6; j++) {
-                if (grid[i][j] == turn) count++;
-                else count = 0;
-                if (count == 4)
-                    return true;
-            }
-        }
-        //Horizontal
-        for (int j = 0; j < 6; j++){
-            int count = 0;
-            for(int i = 0; i < 7; i++) {
-                if (grid[i][j] == turn) count++;
-                else count = 0;
-                if (count == 4)
-                    return true;
-            }
-        }
-
-        for (int i = 0; i < 4; i++){
-            for(int j = 0; j < 3; j++) {
-                if(turn == grid[i][j] && turn == grid[i+1][j+1] &&
-                        turn == grid[i+2][j+2] && turn == grid[i+3][j+3]){
-                    return true;
-                }
-            }
-            for(int j = 5; j > 2; j--) {
-                if(turn == grid[i][j] && turn == grid[i+1][j-1] &&
-                        turn == grid[i+2][j-2] && turn == grid[i+3][j-3]){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public String updateState(int Position){
-        loadGame();
-        String new_string = "";
-        int i = Position;
-        new_string = state.substring(0, i*6);
-        for (int j = 0; j < 6; j++) {
-            int k = i * 6 + j;
-            switch (state.charAt(k)) {
-                case '0':
-                    if(turn == 1){
-                        new_string = new_string + "1";
-                        for(int l = 0; l < (5 - j); l++){
-                            new_string = new_string + "0";
-                        }
-                        j = 10;
-                    }else{
-                        new_string = new_string + "2";
-                        for(int l = 0; l < (5 - j); l++){
-                            new_string = new_string + "0";
-                        }
-                        j = 10;
-                    }
-                    break;
-                case '1':
-                    new_string = new_string + "1";
-                    break;
-                case '2':
-                    new_string = new_string + "2";
-                    break;
-            }
-        }
-
-
-        new_string = new_string + state.substring(i*6+6, 42);
-        //Toast.makeText(getContext(), new_string, Toast.LENGTH_SHORT).show();
-        return new_string;
     }
 
     public void updateDrawView(String new_state) {
@@ -189,7 +97,7 @@ public class GameFragment extends Fragment{
             out1.write(new_state);
             out1.close();
             OutputStreamWriter out2=new OutputStreamWriter(getContext().openFileOutput("turn.txt",MODE_PRIVATE));
-            String text2 = Integer.toString(turn);
+            String text2 = Integer.toString(model.getTurn());
             out2.write(text2);
             out2.close();
         }
@@ -197,12 +105,12 @@ public class GameFragment extends Fragment{
             e.printStackTrace();
         }
 
-        win = winDetect(new_state);
-        System.out.println(win);
+        model.setWin(model.winDetect(new_state));
+        System.out.println(model.isWin());
         DrawView view = getActivity().findViewById(R.id.drawView);
-        view.update(new_state, turn, win);
-        if (turn == 1) turn = 2;
-        else turn = 1;
+        view.update(new_state, model.getTurn(), model.isWin());
+        if (model.getTurn() == 1) model.setTurn(2);
+        else model.setTurn(1);
     }
 
     @Override
@@ -215,15 +123,17 @@ public class GameFragment extends Fragment{
         // below that sets the updates the drawing?
         Bundle args = getArguments();
         if (args != null) {
-            loadState = args.getInt(ARG_LOAD);
+            model.setLoadState(
+                    args.getInt(model.getArgLoad())
+            );
         }
-        if (loadState == 1) {
+        if (model.getLoadState() == 1) {
             loadGame();
             //UPDATE DRAWING
-        }else if (loadState == 2) {
+        }else if (model.getLoadState() == 2) {
 //            Toast.makeText(getContext(),
 //                    "Load? - " + String.valueOf(loadState), Toast.LENGTH_SHORT).show();
-            updateDrawView(state);
+            updateDrawView(model.getState());
         }
     }
 
@@ -237,10 +147,12 @@ public class GameFragment extends Fragment{
             @Override
             public boolean onTouch(View v, MotionEvent event){
                 if(event.getAction() == MotionEvent.ACTION_DOWN) return true;
-                if(event.getAction() == MotionEvent.ACTION_UP && loadState != 0 && !win) {
+                if(event.getAction() == MotionEvent.ACTION_UP
+                        && model.getLoadState() != 0 && !model.isWin()) {
                     int rPosition = (int)event.getX();
-                    Position = convertPosition(v, rPosition);
-                    String new_string = updateState(Position);
+                    model.setPosition(convertPosition(v, rPosition));
+                    loadGame();
+                    String new_string = model.updateState(model.getPosition());
                     //drawView.update(new_string);
                     updateDrawView(new_string);
                     return true;
@@ -250,4 +162,6 @@ public class GameFragment extends Fragment{
         });
         return view;
     }
+
+
 }
