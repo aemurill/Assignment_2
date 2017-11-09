@@ -2,6 +2,7 @@ package aemurill.assignment_2;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
@@ -16,15 +17,14 @@ import static junit.framework.Assert.fail;
 
 public class DrawView extends View {
     String state = "000000000000000000000000000000000000000000";
+    int turn = 1;
+    boolean win = false;
     Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     Paint chipPaint_Empty = new Paint(Paint.ANTI_ALIAS_FLAG);
     Paint chipPaint_Red = new Paint(Paint.ANTI_ALIAS_FLAG);
     Paint chipPaint_Yellow = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     int strokeWidth = 24;
-
-    public interface DrawCallBack{
-        public void update(String new_state);
-    }
 
     private void setPaint() {
         linePaint.setAntiAlias(true);
@@ -52,6 +52,10 @@ public class DrawView extends View {
         chipPaint_Yellow.setStyle(Paint.Style.FILL);
         chipPaint_Yellow.setStrokeJoin(Paint.Join.ROUND);
         chipPaint_Yellow.setStrokeCap(Paint.Cap.BUTT);
+        textPaint.setColor(Color.BLACK);
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setTextSize(100);
+
     }
 
     public DrawView(Context context, @Nullable AttributeSet attrs) {
@@ -78,6 +82,16 @@ public class DrawView extends View {
         Paint chipPaint = chipPaint_Empty;
         float w = getMeasuredWidth();
         float h = w * ((float) 6 / 7);
+
+        RectF backGround = rectPos(0, 0, w, getMeasuredHeight());
+
+        if(win) {
+            if(turn == 2) canvas.drawRect(backGround, chipPaint_Yellow);
+            else canvas.drawRect(backGround, chipPaint_Red);
+        }else{
+            if(turn == 1) canvas.drawRect(backGround, chipPaint_Yellow);
+            else canvas.drawRect(backGround, chipPaint_Red);
+        }
 
         RectF grid = rectPos(strokeWidth, strokeWidth, w - strokeWidth, h - strokeWidth);
         canvas.drawRect(grid, linePaint);
@@ -111,6 +125,15 @@ public class DrawView extends View {
                         360,
                         false, chipPaint);
             }
+            if(win){
+                String player = "PLAYER_COLOR";
+                if(turn == 1) player = "Red";
+                else player = "Yellow";
+                String congrats =  player + " wins!";
+                int yPos = (int) ((getMeasuredHeight() + h)/2 - 50);
+                int xPos = (int) ((w - 100 * Math.abs(congrats.length() / 2)) / 2);
+                canvas.drawText(congrats, xPos, convert(yPos), textPaint);
+            }
         }
 
             /*
@@ -131,8 +154,10 @@ public class DrawView extends View {
         this.setMeasuredDimension(parentWidth, parentHeight);
     }
 
-    public void update(String new_state){
+    public void update(String new_state, int new_turn, boolean check){
         state = new_state;
+        turn = new_turn;
+        win = check;
         invalidate();
     }
 }

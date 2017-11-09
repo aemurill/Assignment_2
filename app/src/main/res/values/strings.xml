@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Assignment_2</string>
+    <string name="new_game">NEW GAME</string>
+    <string name="saved_game">SAVED GAME</string>
+    <string name="connect_4">Connect 4</string>
 </resources>
