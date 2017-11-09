@@ -16,7 +16,7 @@ import static junit.framework.Assert.fail;
  */
 
 public class DrawView extends View {
-    String state = "000000000000000000000000000000000000000000";
+    String state = DataModel.def_state;
     int turn = 1;
     boolean win = false;
     Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);

@@ -5,30 +5,24 @@ import android.provider.ContactsContract;
 import java.util.Observable;
 
 /**
- * Created by Beeooow on 11/9/2017.
+ * Created by aemurill on 11/9/2017.
  */
 
 public class DataModel extends Observable{
-    private static String ARG_LOAD;
+    public static String ARG_LOAD = "LoadState";
+    public static String def_state = "000000000000000000000000000000000000000000";
     private int loadState;
     private int turn;
     private boolean win;
-    private String def_state;
     private String state;
     private int position;
 
     public DataModel(){
-        ARG_LOAD = "LoadState";
         loadState = 0;
         turn = 1;
         win = false;
-        def_state = "000000000000000000000000000000000000000000";
         state = def_state;
         position = -1;
-    }
-
-    public String getArgLoad() {
-        return ARG_LOAD;
     }
 
     public void setLoadState(int loadState){

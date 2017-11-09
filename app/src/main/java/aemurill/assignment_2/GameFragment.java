@@ -124,7 +124,7 @@ public class GameFragment extends Fragment{
         Bundle args = getArguments();
         if (args != null) {
             model.setLoadState(
-                    args.getInt(model.getArgLoad())
+                    args.getInt(DataModel.ARG_LOAD)
             );
         }
         if (model.getLoadState() == 1) {

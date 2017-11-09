@@ -68,8 +68,7 @@ public class Main_Activity extends FragmentActivity implements MainFragment.Clic
             // Create fragment and give it an argument for the selected article
             GameFragment newFrag = new GameFragment();
             Bundle args = new Bundle();
-            DataModel model = new DataModel();
-            args.putInt(model.getArgLoad(), loadState);
+            args.putInt(DataModel.ARG_LOAD, loadState);
             newFrag.setArguments(args);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
