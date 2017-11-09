@@ -8,13 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 /**
  * Created by aemurill on 11/4/2017.
  */
 
-public class MainFragment extends Fragment implements View.OnClickListener{
+public class MainFragment extends Fragment implements View.OnClickListener {
     ClickInterface Interface;
 
     // Container Activity must implement this interface
@@ -23,13 +22,13 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
-    public void onAttach(Activity activity){
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
             Interface = (ClickInterface) activity;
-        }catch (ClassCastException e){
+        } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() +
-                "must implement ClickInterface");
+                    "must implement ClickInterface");
         }
 
     }
@@ -47,8 +46,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
-    public void onClick(View view){
-        switch (view.getId()){
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.load:
                 //Toast.makeText(getContext(), "LOAD", Toast.LENGTH_SHORT).show();
                 Interface.buttonClicked(R.id.load);

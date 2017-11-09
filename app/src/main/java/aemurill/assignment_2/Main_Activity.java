@@ -60,11 +60,11 @@ public class Main_Activity extends FragmentActivity implements MainFragment.Clic
 
             // Call a method in the GameFragment to update its content
             ////gameFrag.updateView(view);
-            Toast.makeText(this, "UPDATING VIEW", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "UPDATING VIEW", Toast.LENGTH_SHORT).show();
 
         } else {
             // If the frag is not available, we're in the one-pane layout and must swap frags...
-            Toast.makeText(this, "SWAPPING VIEW", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "SWAPPING VIEW", Toast.LENGTH_SHORT).show();
             // Create fragment and give it an argument for the selected article
             GameFragment newFrag = new GameFragment();
             Bundle args = new Bundle();
