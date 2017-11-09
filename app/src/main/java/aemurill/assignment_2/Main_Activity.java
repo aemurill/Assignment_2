@@ -50,7 +50,7 @@ public class Main_Activity extends FragmentActivity implements MainFragment.Clic
 
     }
 
-    private void swapViews(boolean loadSave){
+    private void swapViews(boolean loadState){
         // Capture the game fragment from the activity layout
         GameFragment gameFrag = (GameFragment)
                 getSupportFragmentManager().findFragmentById(R.id.game_fragment);
@@ -60,15 +60,15 @@ public class Main_Activity extends FragmentActivity implements MainFragment.Clic
 
             // Call a method in the GameFragment to update its content
             ////gameFrag.updateView(view);
-            Toast.makeText(this, "UPDATE VIEW", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "UPDATING VIEW", Toast.LENGTH_SHORT).show();
 
         } else {
             // If the frag is not available, we're in the one-pane layout and must swap frags...
-            Toast.makeText(this, "SWAP VIEW", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "SWAPPING VIEW", Toast.LENGTH_SHORT).show();
             // Create fragment and give it an argument for the selected article
             GameFragment newFrag = new GameFragment();
             Bundle args = new Bundle();
-            args.putBoolean(GameFragment.ARG_LOAD, loadSave);
+            args.putBoolean(GameFragment.ARG_LOAD, loadState);
             newFrag.setArguments(args);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -85,15 +85,15 @@ public class Main_Activity extends FragmentActivity implements MainFragment.Clic
     @Override
     public void buttonClicked(int id){
         switch (id){
-            //player selected New Game
-            case R.id.load:
-                //Toast.makeText(this, "LOAD", Toast.LENGTH_SHORT).show();
-                swapViews(true);
-                break;
             //player selected Saved Game
             case R.id.restart:
                 //Toast.makeText(this, "RESTART", Toast.LENGTH_SHORT).show();
                 swapViews(false);
+                break;
+            //player selected New Game
+            case R.id.load:
+                //Toast.makeText(this, "LOAD", Toast.LENGTH_SHORT).show();
+                swapViews(true);
                 break;
         }
     }

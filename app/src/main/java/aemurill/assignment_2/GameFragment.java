@@ -1,5 +1,6 @@
 package aemurill.assignment_2;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -7,15 +8,11 @@ import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import static android.content.ContentValues.TAG;
 import static junit.framework.Assert.fail;
 
 /**
@@ -24,9 +21,28 @@ import static junit.framework.Assert.fail;
 
 public class GameFragment extends Fragment implements View.OnClickListener {
     final static String ARG_LOAD = "LoadState";
-    boolean LoadState = false;
+    boolean loadState = false;
     int col = 7, row = 6;
     String state = "000000000000000000000000000000000000000000"; //defaulted to empty grid
+//    ClickInterface Interface;
+//
+//    // Container Activity must implement this interface
+//    public interface ClickInterface {
+//        public void drawingClicked(int id);
+//    }
+//
+//    @Override
+//    public void onAttach(Activity activity){
+//        super.onAttach(activity);
+//        try {
+//            Interface = (ClickInterface) activity;
+//        }catch (ClassCastException e){
+//            throw new ClassCastException(activity.toString() +
+//                    "must implement ClickInterface");
+//        }
+//
+//    }
+
 
     private class DrawView extends View {
         Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -68,22 +84,9 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             setPaint();
         }
 
-        public DrawView(Context context, AttributeSet attrs) {
-            super(context);
-            setPaint();
-//            if(selectedColumn != -1){
-//                state[selectedColumn]
-//            }
-
-        }
-
         private float convert (float n){
             return n * -1 + getMeasuredHeight();
         }
-
-//        private void drawLine (Canvas canvas, float x1, float y1, float x2, float y2, Paint mPaint){
-//            canvas.drawLine(x1, convert(y1), x2, convert(y2), mPaint);
-//        }
 
         private RectF circlePos (float x, float y, float d){
             return new RectF(x, convert(y+d), x+d, convert(y));
@@ -115,12 +118,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                         case '2': chipPaint = chipPaint_Yellow; break;
                         default: fail("Invalid State encountered");
                     }
-//                    if(state.charAt(k) == '1') {
-//                        chipPaint = chipPaint_Red;
-//                    }else if (state.charAt(k) == '2'){
-//                        chipPaint = chipPaint_Red;
-//                    }
-
                     RectF mBounds = circlePos(
                             strokeWidth + iX,
                             strokeWidth + jY,
@@ -132,14 +129,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                             false, chipPaint);
                 }
             }
-//            for(int i = 0; i < 8; i++) {
-//                float iW = (strokeWidth / 2) + (gap * i);
-//                drawLine(canvas, iW, 0, iW, h, linePaint);
-//            }
-//            for(int i = 0; i < 7; i++){
-//                float iH = (strokeWidth/2) + (gap * i);
-//                drawLine(canvas, 0, iH, w, iH, linePaint);
-//            }
 
             /*
              * Grid ratio tests
@@ -161,35 +150,52 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        Toast.makeText(getContext(), String.valueOf(LoadState), Toast.LENGTH_SHORT).show();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        //super.onCreateView(inflater, container, savedInstanceState);
+
+        // If activity recreated (such as from screen rotate), restore
+        // the previous state set by onSaveInstanceState().
+        // This is primarily necessary when in the two-pane layout.
+        //SHOULD BE REDUNDANT!!!
+        if (savedInstanceState != null) {
+            loadState = savedInstanceState.getBoolean(ARG_LOAD);
+        }
         return new DrawView(getActivity());
-        /*View rootView = inflater.inflate(R.layout.game_view, container, false);
-        DrawView drawView = rootView.findViewById(R.id.drawView);
-        //new DrawView(getContext());
-        drawView.setOnClickListener(this);
-        return drawView;*/
+
+//        View rootView = inflater.inflate(R.layout.game_view, container, false);
+//        DrawView drawing = (DrawView) rootView.findViewById(R.id.drawView);
+//        drawing.setOnClickListener(this);
+//        return rootView;
+
+//        View rootView = inflater.inflate(R.layout.game_view, container, false);
+//        DrawView drawView = rootView.findViewById(R.id.drawView);
+//        new DrawView(getContext());
+//        drawView.setOnClickListener(this);
+//        return drawView;
     }
 
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        /*// Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.main_view, container, false);
-//        */
-//        View rootView = inflater.inflate(R.layout.main_view, container, false);
-//        Button playButton = (Button) rootView.findViewById(R.id.play);
-//        playButton.setOnClickListener(this);
-//        Button loadButton = (Button) rootView.findViewById(R.id.load);
-//        loadButton.setOnClickListener(this);
-//        Button restartButton = (Button) rootView.findViewById(R.id.restart);
-//        restartButton.setOnClickListener(this);
-//        return rootView;
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // During startup, check if there are arguments passed to the fragment.
+        // onStart is a good place to do this because the layout has already been
+        // applied to the fragment at this point so we can safely call the method
+        // below that sets the updates the drawing?
+        Bundle args = getArguments();
+        loadState = args.getBoolean(ARG_LOAD);
+        if (loadState) {
+            // Set article based on saved instance state defined during onCreateView
+            Toast.makeText(getContext(),
+                    "Load? - " + String.valueOf(loadState), Toast.LENGTH_SHORT).show();
+            //UPDATE DRAWING
+        }else Toast.makeText(getContext(),
+                "Load? - " + String.valueOf(loadState), Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public void onClick(View view){
-        Toast.makeText(getContext(), String.valueOf(LoadState), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), String.valueOf(loadState), Toast.LENGTH_SHORT).show();
     }
 }

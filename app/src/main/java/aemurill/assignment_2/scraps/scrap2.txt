@@ -1,0 +1,8 @@
+
+            /*
+             * Grid ratio tests
+            drawLine(canvas, strokeWidth/2, strokeWidth/2,
+             w-strokeWidth/2, w-strokeWidth/2, linePaint);
+            drawLine(canvas,w-strokeWidth/2, strokeWidth/2,
+             strokeWidth/2, w-strokeWidth/2, linePaint);
+             */

@@ -1,0 +1,3 @@
+        private void drawLine (Canvas canvas, float x1, float y1, float x2, float y2, Paint mPaint){
+            canvas.drawLine(x1, convert(y1), x2, convert(y2), mPaint);
+        }
