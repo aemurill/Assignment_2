@@ -16,7 +16,7 @@ import android.widget.Toast;
 import static junit.framework.Assert.fail;
 
 /**
- * Created by Beeooow on 11/4/2017.
+ * Created by aemurill on 11/4/2017.
  */
 
 public class GameFragment extends Fragment implements View.OnClickListener {
